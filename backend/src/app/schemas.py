@@ -25,7 +25,7 @@ class UserRead(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class HostCreate(BaseModel):
     subdomain: str
@@ -39,7 +39,7 @@ class HostRead(BaseModel):
     expires_at: Optional[datetime]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class HostDetail(HostRead):
     ftp_user: Optional[str]

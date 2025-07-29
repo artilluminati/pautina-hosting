@@ -1,9 +1,12 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
+from dotenv import load_dotenv
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://user:password@localhost:5432/webhosting")
+load_dotenv()
+
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://root:root@localhost:5432/pautina-hosting-dev")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
