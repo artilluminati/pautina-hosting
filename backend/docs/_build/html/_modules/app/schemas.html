@@ -249,12 +249,28 @@
     <span class="n">role</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RoleEnum</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="UserCreate">
-<a class="viewcode-back" href="../../app.html#app.schemas.UserCreate">[документация]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">UserCreate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<div class="viewcode-block" id="PasswordRecoverRequest">
+<a class="viewcode-back" href="../../app.html#app.schemas.PasswordRecoverRequest">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PasswordRecoverRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">phone</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="PasswordRecoverResponse">
+<a class="viewcode-back" href="../../app.html#app.schemas.PasswordRecoverResponse">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PasswordRecoverResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="n">login</span><span class="p">:</span> <span class="n">EmailStr</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="UserRegister">
+<a class="viewcode-back" href="../../app.html#app.schemas.UserRegister">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserRegister</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
-    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">phone</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">agree_terms</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">agree_privacy</span><span class="p">:</span> <span class="nb">bool</span></div>
 
 
 <div class="viewcode-block" id="UserRead">
@@ -263,6 +279,7 @@
     <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">email</span><span class="p">:</span> <span class="n">EmailStr</span>
+    <span class="n">phone</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">RoleEnum</span>
     <span class="n">active</span><span class="p">:</span> <span class="nb">bool</span>
     <span class="n">created_at</span><span class="p">:</span> <span class="n">datetime</span>
@@ -272,6 +289,12 @@
     <span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">:</span>
         <span class="n">from_attributes</span> <span class="o">=</span> <span class="kc">True</span></div>
 </div>
+
+
+<div class="viewcode-block" id="UserReadAfterRegister">
+<a class="viewcode-back" href="../../app.html#app.schemas.UserReadAfterRegister">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">UserReadAfterRegister</span><span class="p">(</span><span class="n">UserRead</span><span class="p">):</span>
+    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span></div>
 
 
 <div class="viewcode-block" id="HostCreate">

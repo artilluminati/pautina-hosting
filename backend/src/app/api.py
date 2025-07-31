@@ -65,10 +65,10 @@ app.add_middleware(
 
 
 # подключаем роуты
-app.include_router(auth.router, prefix="/auth", tags=["Auth"])
-app.include_router(users.router, prefix="/users", tags=["Users"])
-app.include_router(hosts.router, prefix="/hosts", tags=["Hosts"])
-app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+app.include_router(auth.router)
+app.include_router(users.router)
+app.include_router(hosts.router)
+app.include_router(admin.router)
 
 @app.get("/", tags=["Root"])
 async def root():

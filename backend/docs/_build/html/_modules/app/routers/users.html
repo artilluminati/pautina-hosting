@@ -230,13 +230,40 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Исходный код app.routers.users</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span>
+<span></span><span class="c1"># backend/src/app/routers/users.py</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Users API Module</span>
+
+<span class="sd">Модуль для получения информации о текущем пользователе на основе JWT-токена.</span>
+
+<span class="sd">1. GET /users/me</span>
+<span class="sd">   - Описание: Получить информацию о текущем пользователе.</span>
+<span class="sd">   - Headers:</span>
+<span class="sd">     - Authorization: Bearer &lt;access_token&gt;</span>
+<span class="sd">   - Response (200): UserRead</span>
+<span class="sd">     - id, name, email, phone, role, active, created_at</span>
+<span class="sd">   - Ошибки:</span>
+<span class="sd">     - 401 Unauthorized — если токен отсутствует или недействителен.</span>
+<span class="sd">     - 404 Not Found — если пользователь из токена не найден в БД.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">status</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">schemas</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">core</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.security</span><span class="w"> </span><span class="kn">import</span> <span class="n">OAuth2PasswordBearer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">schemas</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">database</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..core.security</span><span class="w"> </span><span class="kn">import</span> <span class="n">decode_access_token</span>
 
-<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
+<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Users&quot;</span><span class="p">],</span>
+    <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+        <span class="mi">401</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">},</span>
+        <span class="mi">404</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Not Found&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
 <span class="n">oauth2_scheme</span> <span class="o">=</span> <span class="n">OAuth2PasswordBearer</span><span class="p">(</span><span class="n">tokenUrl</span><span class="o">=</span><span class="s2">&quot;/auth/login&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="get_current_user">
@@ -245,21 +272,46 @@
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">oauth2_scheme</span><span class="p">),</span>
     <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">)</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Депенденси для извлечения текущего пользователя из JWT-токена.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">    - token: str (Bearer &lt;token&gt;)</span>
+<span class="sd">    - db: Session</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">    - models.User</span>
+
+<span class="sd">    Ошибки:</span>
+<span class="sd">    - HTTP 401: Invalid token</span>
+<span class="sd">    - HTTP 404: User not found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">token_data</span> <span class="o">=</span> <span class="n">decode_access_token</span><span class="p">(</span><span class="n">token</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">token_data</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid token&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_401_UNAUTHORIZED</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid token&quot;</span><span class="p">)</span>
     <span class="n">user</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="p">,</span> <span class="n">token_data</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;User not found&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">user</span></div>
 
 
 <div class="viewcode-block" id="read_users_me">
 <a class="viewcode-back" href="../../../app.routers.html#app.routers.users.read_users_me">[документация]</a>
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/me&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">schemas</span><span class="o">.</span><span class="n">UserRead</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_users_me</span><span class="p">(</span><span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)):</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s2">&quot;/me&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">schemas</span><span class="o">.</span><span class="n">UserRead</span><span class="p">,</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Информация о текущем пользователе&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_users_me</span><span class="p">(</span>
+    <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Получить информацию о текущем пользователе.</span>
+<span class="sd">    Возвращает данные текущего аутентифицированного пользователя.</span>
+
+<span class="sd">    Ошибки:</span>
+<span class="sd">    - 401 Unauthorized</span>
+<span class="sd">    - 404 Not Found</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">current_user</span></div>
 

@@ -230,49 +230,112 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Исходный код app.routers.admin</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">database</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.users</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_current_user</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">schemas</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Admin API Module</span>
 
-<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">()</span>
+<span class="sd">Маршруты (доступны только администраторам):</span>
+
+<span class="sd">1. GET /admin/users</span>
+<span class="sd">   - Описание: Получить список всех пользователей.</span>
+<span class="sd">   - Headers:</span>
+<span class="sd">     - Authorization: Bearer &lt;access_token&gt;</span>
+<span class="sd">   - Response (200): list[UserRead]</span>
+<span class="sd">     - Модель UserRead: id, name, email, phone, role, active, created_at</span>
+<span class="sd">   - Ошибки:</span>
+<span class="sd">     - 401 Unauthorized: при отсутствии или некорректном токене</span>
+<span class="sd">     - 403 Forbidden: если роль текущего пользователя не admin</span>
+
+<span class="sd">2. POST /admin/hosts/{host_id}/block</span>
+<span class="sd">   - Описание: Заблокировать указанный хост.</span>
+<span class="sd">   - Path Parameters:</span>
+<span class="sd">     - host_id (int) - ID хоста для блокировки</span>
+<span class="sd">   - Headers:</span>
+<span class="sd">     - Authorization: Bearer &lt;access_token&gt;</span>
+<span class="sd">   - Response (200): {&quot;detail&quot;: &quot;Host blocked&quot;}</span>
+<span class="sd">   - Ошибки:</span>
+<span class="sd">     - 401 Unauthorized</span>
+<span class="sd">     - 403 Forbidden</span>
+<span class="sd">     - 404 Not Found: если хост с указанным ID не найден</span>
+
+<span class="sd">3. POST /admin/hosts/{host_id}/archive</span>
+<span class="sd">   - Описание: Архивировать указанный хост.</span>
+<span class="sd">   - Path Parameters:</span>
+<span class="sd">     - host_id (int) - ID хоста для архивации</span>
+<span class="sd">   - Headers:</span>
+<span class="sd">     - Authorization: Bearer &lt;access_token&gt;</span>
+<span class="sd">   - Response (200): {&quot;detail&quot;: &quot;Host archived&quot;}</span>
+<span class="sd">   - Ошибки:</span>
+<span class="sd">     - 401 Unauthorized</span>
+<span class="sd">     - 403 Forbidden</span>
+<span class="sd">     - 404 Not Found: если хост с указанным ID не найден</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">status</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sqlalchemy.orm</span><span class="w"> </span><span class="kn">import</span> <span class="n">Session</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">schemas</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.users</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_current_user</span>
+
+<span class="n">router</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;/admin&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Admin&quot;</span><span class="p">],</span>
+    <span class="n">responses</span><span class="o">=</span><span class="p">{</span>
+        <span class="mi">401</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Unauthorized&quot;</span><span class="p">},</span>
+        <span class="mi">403</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Forbidden&quot;</span><span class="p">},</span>
+        <span class="mi">404</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Not Found&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
 <div class="viewcode-block" id="list_users">
 <a class="viewcode-back" href="../../../app.routers.html#app.routers.admin.list_users">[документация]</a>
-<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="nb">list</span><span class="p">[</span><span class="n">schemas</span><span class="o">.</span><span class="n">UserRead</span><span class="p">])</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">list_users</span><span class="p">(</span><span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">),</span> <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Получить список всех пользователей в базе данных.</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="nb">list</span><span class="p">[</span><span class="n">schemas</span><span class="o">.</span><span class="n">UserRead</span><span class="p">],</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Список пользователей&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">list_users</span><span class="p">(</span>
+    <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">),</span>
+    <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Получить список всех пользователей в базе данных.</span>
 
-<span class="sd">    Доступно только для администраторов.</span>
-
-<span class="sd">    Возвращает:</span>
-<span class="sd">        List[UserRead]: Список всех пользователей в базе данных.</span>
+<span class="sd">    - Требует роль admin.</span>
+<span class="sd">    - Возвращает список моделей UserRead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">role</span> <span class="o">!=</span> <span class="n">models</span><span class="o">.</span><span class="n">RoleEnum</span><span class="o">.</span><span class="n">admin</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">User</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="block_host">
 <a class="viewcode-back" href="../../../app.routers.html#app.routers.admin.block_host">[документация]</a>
-<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/hosts/</span><span class="si">{host_id}</span><span class="s2">/block&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">block_host</span><span class="p">(</span><span class="n">host_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">),</span> <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Заблокировать хост.</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/hosts/</span><span class="si">{host_id}</span><span class="s2">/block&quot;</span><span class="p">,</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Блокировка хоста&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">block_host</span><span class="p">(</span>
+    <span class="n">host_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">),</span>
+    <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Заблокировать указанный хост.</span>
 
-<span class="sd">    Доступно только для администраторов.</span>
+<span class="sd">    Path Parameters:</span>
+<span class="sd">    - host_id: ID хоста.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        host_id: ID хоста, который нужно заблокировать.</span>
+<span class="sd">    Требует роль admin.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        Dict[str, str]: {&quot;detail&quot;: &quot;Host blocked&quot;}</span>
+<span class="sd">    Возвращает:</span>
+<span class="sd">    - detail: Host blocked</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">role</span> <span class="o">!=</span> <span class="n">models</span><span class="o">.</span><span class="n">RoleEnum</span><span class="o">.</span><span class="n">admin</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span><span class="p">)</span>
     <span class="n">host</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Host</span><span class="p">,</span> <span class="n">host_id</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">host</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">)</span>
     <span class="n">host</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">StatusEnum</span><span class="o">.</span><span class="n">disabled</span>
     <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;Host blocked&quot;</span><span class="p">}</span></div>
@@ -280,23 +343,32 @@
 
 <div class="viewcode-block" id="archive_host">
 <a class="viewcode-back" href="../../../app.routers.html#app.routers.admin.archive_host">[документация]</a>
-<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/hosts/</span><span class="si">{host_id}</span><span class="s2">/archive&quot;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">archive_host</span><span class="p">(</span><span class="n">host_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">),</span> <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Архивировать хост.</span>
+<span class="nd">@router</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+    <span class="s2">&quot;/hosts/</span><span class="si">{host_id}</span><span class="s2">/archive&quot;</span><span class="p">,</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">summary</span><span class="o">=</span><span class="s2">&quot;Архивация хоста&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">archive_host</span><span class="p">(</span>
+    <span class="n">host_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">db</span><span class="p">:</span> <span class="n">Session</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">get_db</span><span class="p">),</span>
+    <span class="n">current_user</span><span class="p">:</span> <span class="n">models</span><span class="o">.</span><span class="n">User</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_current_user</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Архивировать указанный хост.</span>
 
-<span class="sd">    Доступно только для администраторов.</span>
+<span class="sd">    Path Parameters:</span>
+<span class="sd">    - host_id: ID хоста.</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">        host_id: ID хоста, который нужно архивировать.</span>
+<span class="sd">    Требует роль admin.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">        Dict[str, str]: {&quot;detail&quot;: &quot;Host archived&quot;}</span>
+<span class="sd">    Возвращает:</span>
+<span class="sd">    - detail: Host archived</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">current_user</span><span class="o">.</span><span class="n">role</span> <span class="o">!=</span> <span class="n">models</span><span class="o">.</span><span class="n">RoleEnum</span><span class="o">.</span><span class="n">admin</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">403</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_403_FORBIDDEN</span><span class="p">)</span>
     <span class="n">host</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Host</span><span class="p">,</span> <span class="n">host_id</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">host</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_404_NOT_FOUND</span><span class="p">)</span>
     <span class="n">host</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">StatusEnum</span><span class="o">.</span><span class="n">archived</span>
     <span class="n">db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;detail&quot;</span><span class="p">:</span> <span class="s2">&quot;Host archived&quot;</span><span class="p">}</span></div>

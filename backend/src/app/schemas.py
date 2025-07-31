@@ -11,21 +11,35 @@ class TokenData(BaseModel):
     user_id: Optional[int]
     role: Optional[RoleEnum]
 
-class UserCreate(BaseModel):
+class PasswordRecoverRequest(BaseModel):
+    phone: str
+
+class PasswordRecoverResponse(BaseModel):
+    login: EmailStr
+    password: str
+
+class UserRegister(BaseModel):
     name: str
     email: EmailStr
-    password: str
+    password: Optional[str]
+    phone: str
+    agree_terms: bool
+    agree_privacy: bool
 
 class UserRead(BaseModel):
     id: int
     name: str
     email: EmailStr
+    phone: str
     role: RoleEnum
     active: bool
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+class UserReadAfterRegister(UserRead):
+    token: str
 
 class HostCreate(BaseModel):
     subdomain: str

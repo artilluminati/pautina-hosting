@@ -249,6 +249,10 @@
         </ul></li>
         <li><a href="app.html#app.models.RoleEnum.admin">admin (атрибут app.models.RoleEnum)</a>
 </li>
+        <li><a href="app.html#app.schemas.UserRegister.agree_privacy">agree_privacy (атрибут app.schemas.UserRegister)</a>
+</li>
+        <li><a href="app.html#app.schemas.UserRegister.agree_terms">agree_terms (атрибут app.schemas.UserRegister)</a>
+</li>
         <li>
     app
 
@@ -348,6 +352,8 @@
         <li><a href="app.html#app.models.Host.created_at">created_at (атрибут app.models.Host)</a>
 
         <ul>
+          <li><a href="app.html#app.models.TempPassword.created_at">(атрибут app.models.TempPassword)</a>
+</li>
           <li><a href="app.html#app.models.User.created_at">(атрибут app.models.User)</a>
 </li>
           <li><a href="app.html#app.schemas.UserRead.created_at">(атрибут app.schemas.UserRead)</a>
@@ -378,9 +384,9 @@
         <li><a href="app.html#app.models.User.email">email (атрибут app.models.User)</a>
 
         <ul>
-          <li><a href="app.html#app.schemas.UserCreate.email">(атрибут app.schemas.UserCreate)</a>
-</li>
           <li><a href="app.html#app.schemas.UserRead.email">(атрибут app.schemas.UserRead)</a>
+</li>
+          <li><a href="app.html#app.schemas.UserRegister.email">(атрибут app.schemas.UserRegister)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -429,6 +435,8 @@
   <h2>G</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="app.routers.html#app.routers.auth.generate_random_password">generate_random_password() (в модуле app.routers.auth)</a>
+</li>
         <li><a href="app.routers.html#app.routers.users.get_current_user">get_current_user() (в модуле app.routers.users)</a>
 </li>
         <li><a href="app.html#app.database.get_db">get_db() (в модуле app.database)</a>
@@ -438,6 +446,8 @@
         <li><a href="app.routers.html#app.routers.hosts.get_host">get_host() (в модуле app.routers.hosts)</a>
 </li>
         <li><a href="app.routers.html#app.routers.auth.get_user_by_email">get_user_by_email() (в модуле app.routers.auth)</a>
+</li>
+        <li><a href="app.routers.html#app.routers.auth.get_user_by_phone">get_user_by_phone() (в модуле app.routers.auth)</a>
 </li>
         <li><a href="app.html#app.models.RoleEnum.guest">guest (атрибут app.models.RoleEnum)</a>
 </li>
@@ -486,6 +496,10 @@
 </li>
         </ul></li>
     </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="app.routers.html#app.routers.auth.is_invalid_agreements">is_invalid_agreements() (в модуле app.routers.auth)</a>
+</li>
+    </ul></td>
   </tr></table>
 </section>
 
@@ -500,6 +514,8 @@
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="app.routers.html#app.routers.admin.list_users">list_users() (в модуле app.routers.admin)</a>
+</li>
+        <li><a href="app.html#app.schemas.PasswordRecoverResponse.login">login (атрибут app.schemas.PasswordRecoverResponse)</a>
 </li>
         <li><a href="app.routers.html#app.routers.auth.login">login() (в модуле app.routers.auth)</a>
 </li>
@@ -530,13 +546,19 @@
 </li>
           <li><a href="app.html#app.schemas.HostRead.model_config">(атрибут app.schemas.HostRead)</a>
 </li>
+          <li><a href="app.html#app.schemas.PasswordRecoverRequest.model_config">(атрибут app.schemas.PasswordRecoverRequest)</a>
+</li>
+          <li><a href="app.html#app.schemas.PasswordRecoverResponse.model_config">(атрибут app.schemas.PasswordRecoverResponse)</a>
+</li>
           <li><a href="app.html#app.schemas.Token.model_config">(атрибут app.schemas.Token)</a>
 </li>
           <li><a href="app.html#app.schemas.TokenData.model_config">(атрибут app.schemas.TokenData)</a>
 </li>
-          <li><a href="app.html#app.schemas.UserCreate.model_config">(атрибут app.schemas.UserCreate)</a>
-</li>
           <li><a href="app.html#app.schemas.UserRead.model_config">(атрибут app.schemas.UserRead)</a>
+</li>
+          <li><a href="app.html#app.schemas.UserReadAfterRegister.model_config">(атрибут app.schemas.UserReadAfterRegister)</a>
+</li>
+          <li><a href="app.html#app.schemas.UserRegister.model_config">(атрибут app.schemas.UserRegister)</a>
 </li>
         </ul></li>
         <li>
@@ -595,9 +617,9 @@
         <li><a href="app.html#app.models.User.name">name (атрибут app.models.User)</a>
 
         <ul>
-          <li><a href="app.html#app.schemas.UserCreate.name">(атрибут app.schemas.UserCreate)</a>
-</li>
           <li><a href="app.html#app.schemas.UserRead.name">(атрибут app.schemas.UserRead)</a>
+</li>
+          <li><a href="app.html#app.schemas.UserRegister.name">(атрибут app.schemas.UserRegister)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -622,9 +644,31 @@
   <h2>P</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="app.html#app.schemas.UserCreate.password">password (атрибут app.schemas.UserCreate)</a>
+        <li><a href="app.html#app.schemas.PasswordRecoverResponse.password">password (атрибут app.schemas.PasswordRecoverResponse)</a>
+
+        <ul>
+          <li><a href="app.html#app.schemas.UserRegister.password">(атрибут app.schemas.UserRegister)</a>
+</li>
+        </ul></li>
+        <li><a href="app.html#app.schemas.PasswordRecoverRequest">PasswordRecoverRequest (класс в app.schemas)</a>
+</li>
+        <li><a href="app.html#app.schemas.PasswordRecoverResponse">PasswordRecoverResponse (класс в app.schemas)</a>
 </li>
         <li><a href="app.html#app.models.StatusEnum.pending">pending (атрибут app.models.StatusEnum)</a>
+</li>
+        <li><a href="app.html#app.models.User.phone">phone (атрибут app.models.User)</a>
+
+        <ul>
+          <li><a href="app.html#app.schemas.PasswordRecoverRequest.phone">(атрибут app.schemas.PasswordRecoverRequest)</a>
+</li>
+          <li><a href="app.html#app.schemas.UserRead.phone">(атрибут app.schemas.UserRead)</a>
+</li>
+          <li><a href="app.html#app.schemas.UserRegister.phone">(атрибут app.schemas.UserRegister)</a>
+</li>
+        </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="app.html#app.models.User.phone_verified">phone_verified (атрибут app.models.User)</a>
 </li>
         <li><a href="app.html#app.models.Host.plan">plan (атрибут app.models.Host)</a>
 
@@ -634,8 +678,6 @@
           <li><a href="app.html#app.schemas.HostRead.plan">(атрибут app.schemas.HostRead)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="app.html#app.models.PlanEnum">PlanEnum (класс в app.models)</a>
 </li>
     </ul></td>
@@ -647,6 +689,8 @@
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="app.routers.html#app.routers.users.read_users_me">read_users_me() (в модуле app.routers.users)</a>
+</li>
+        <li><a href="app.routers.html#app.routers.auth.recover_password">recover_password() (в модуле app.routers.auth)</a>
 </li>
         <li><a href="app.routers.html#app.routers.auth.register">register() (в модуле app.routers.auth)</a>
 </li>
@@ -712,10 +756,20 @@
   <h2>T</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="app.html#app.schemas.Token">Token (класс в app.schemas)</a>
+        <li><a href="app.html#app.models.TempPassword.temp_password">temp_password (атрибут app.models.TempPassword)</a>
 </li>
+        <li><a href="app.html#app.models.TempPassword">TempPassword (класс в app.models)</a>
+</li>
+        <li><a href="app.html#app.models.TempPassword.token">token (атрибут app.models.TempPassword)</a>
+
+        <ul>
+          <li><a href="app.html#app.schemas.UserReadAfterRegister.token">(атрибут app.schemas.UserReadAfterRegister)</a>
+</li>
+        </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="app.html#app.schemas.Token">Token (класс в app.schemas)</a>
+</li>
         <li><a href="app.html#app.schemas.Token.token_type">token_type (атрибут app.schemas.Token)</a>
 </li>
         <li><a href="app.html#app.schemas.TokenData">TokenData (класс в app.schemas)</a>
@@ -736,11 +790,13 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="app.html#app.schemas.UserCreate">UserCreate (класс в app.schemas)</a>
-</li>
         <li><a href="app.html#app.schemas.UserRead">UserRead (класс в app.schemas)</a>
 </li>
         <li><a href="app.html#app.schemas.UserRead.Config">UserRead.Config (класс в app.schemas)</a>
+</li>
+        <li><a href="app.html#app.schemas.UserReadAfterRegister">UserReadAfterRegister (класс в app.schemas)</a>
+</li>
+        <li><a href="app.html#app.schemas.UserRegister">UserRegister (класс в app.schemas)</a>
 </li>
     </ul></td>
   </tr></table>

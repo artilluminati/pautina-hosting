@@ -243,20 +243,74 @@
 </section>
 <section id="module-app.routers.admin">
 <span id="app-routers-admin-module"></span><h2>app.routers.admin module<a class="headerlink" href="#module-app.routers.admin" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Admin API Module</p>
+<p>Маршруты (доступны только администраторам):</p>
+<ol class="arabic">
+<li><p>GET /admin/users
+- Описание: Получить список всех пользователей.
+- Headers:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Authorization: Bearer &lt;access_token&gt;</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Response (200): list[UserRead]
+- Модель UserRead: id, name, email, phone, role, active, created_at</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized: при отсутствии или некорректном токене
+- 403 Forbidden: если роль текущего пользователя не admin</p></li>
+</ul>
+</li>
+<li><p>POST /admin/hosts/{host_id}/block
+- Описание: Заблокировать указанный хост.
+- Path Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>host_id (int) - ID хоста для блокировки</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Headers:
+- Authorization: Bearer &lt;access_token&gt;</p></li>
+<li><p>Response (200): {«detail»: «Host blocked»}</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized
+- 403 Forbidden
+- 404 Not Found: если хост с указанным ID не найден</p></li>
+</ul>
+</li>
+<li><p>POST /admin/hosts/{host_id}/archive
+- Описание: Архивировать указанный хост.
+- Path Parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>host_id (int) - ID хоста для архивации</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Headers:
+- Authorization: Bearer &lt;access_token&gt;</p></li>
+<li><p>Response (200): {«detail»: «Host archived»}</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized
+- 403 Forbidden
+- 404 Not Found: если хост с указанным ID не найден</p></li>
+</ul>
+</li>
+</ol>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.admin.archive_host">
 <span class="sig-prename descclassname"><span class="pre">app.routers.admin.</span></span><span class="sig-name descname"><span class="pre">archive_host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/admin.html#archive_host"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.admin.archive_host" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Архивировать хост.</p>
-<p>Доступно только для администраторов.</p>
+<dd><p>Архивировать указанный хост.</p>
+<p>Path Parameters:
+- host_id: ID хоста.</p>
+<p>Требует роль admin.</p>
+<p>Возвращает:
+- detail: Host archived</p>
 <dl class="field-list simple">
-<dt class="field-odd">Параметры<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>host_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – ID хоста, который нужно архивировать.</p>
-</dd>
-<dt class="field-even">Результат<span class="colon">:</span></dt>
-<dd class="field-even"><p>{«detail»: «Host archived»}</p>
-</dd>
 <dt class="field-odd">Тип результата<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str, str]</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -264,17 +318,15 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.admin.block_host">
 <span class="sig-prename descclassname"><span class="pre">app.routers.admin.</span></span><span class="sig-name descname"><span class="pre">block_host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/admin.html#block_host"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.admin.block_host" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Заблокировать хост.</p>
-<p>Доступно только для администраторов.</p>
+<dd><p>Заблокировать указанный хост.</p>
+<p>Path Parameters:
+- host_id: ID хоста.</p>
+<p>Требует роль admin.</p>
+<p>Возвращает:
+- detail: Host blocked</p>
 <dl class="field-list simple">
-<dt class="field-odd">Параметры<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>host_id</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – ID хоста, который нужно заблокировать.</p>
-</dd>
-<dt class="field-even">Результат<span class="colon">:</span></dt>
-<dd class="field-even"><p>{«detail»: «Host blocked»}</p>
-</dd>
 <dt class="field-odd">Тип результата<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[str, str]</p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -283,9 +335,13 @@
 <dt class="sig sig-object py" id="app.routers.admin.list_users">
 <span class="sig-prename descclassname"><span class="pre">app.routers.admin.</span></span><span class="sig-name descname"><span class="pre">list_users</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/admin.html#list_users"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.admin.list_users" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Получить список всех пользователей в базе данных.</p>
-<p>Доступно только для администраторов.</p>
-<dl class="simple">
-<dt>Возвращает:</dt><dd><p>List[UserRead]: Список всех пользователей в базе данных.</p>
+<ul class="simple">
+<li><p>Требует роль admin.</p></li>
+<li><p>Возвращает список моделей UserRead.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="app.html#app.models.User" title="app.models.User"><code class="xref py py-class docutils literal notranslate"><span class="pre">User</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -293,22 +349,131 @@
 </section>
 <section id="module-app.routers.auth">
 <span id="app-routers-auth-module"></span><h2>app.routers.auth module<a class="headerlink" href="#module-app.routers.auth" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Auth API Module</p>
+<p>Маршруты:</p>
+<ol class="arabic">
+<li><p>POST /auth/register
+- Описание: Регистрация нового пользователя.
+- Body (JSON):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>name (str) - имя пользователя.</p></li>
+<li><p>email (EmailStr) - email.</p></li>
+<li><p>password (Optional[str]) - временный пароль (используется игнорируется).</p></li>
+<li><p>phone (str) - номер телефона.</p></li>
+<li><p>agree_terms (bool) - согласие с пользовательским соглашением.</p></li>
+<li><p>agree_privacy (bool) - согласие с политикой приватности.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Response (200): schemas.UserReadAfterRegister:
+- id, name, email, phone, role, active, created_at, token</p></li>
+<li><p>Ответ ошибки:
+- 400 Bad Request: «Вы не согласились…», «Адрес электронной почты…», «Номер телефона уже зарегистрирован»</p></li>
+</ul>
+</li>
+<li><p>POST /auth/login
+- Описание: Авторизация пользователя.
+- Body (form data):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>username (str) - email пользователя.</p></li>
+<li><p>password (str) - пароль пользователя.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Response (200): schemas.Token:
+- access_token (str), token_type (str=»bearer»).</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized: «Invalid credentials»</p></li>
+</ul>
+</li>
+<li><p>POST /auth/recover
+- Описание: Восстановление пароля по телефону.
+- Body (JSON):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>phone (str) - номер телефона.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Response (200): schemas.PasswordRecoverResponse:
+- login (EmailStr), password (str) - новый временный пароль.</p></li>
+<li><p>Ошибки:
+- 404 Not Found: «User with this phone not found»</p></li>
+</ul>
+</li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.auth.generate_random_password">
+<span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">generate_random_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#generate_random_password"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.generate_random_password" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Генерация случайного временного пароля.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>length</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – int - длина пароля.</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span></p>
+</dd>
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str - сгенерированный пароль.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.auth.get_user_by_email">
 <span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">get_user_by_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#get_user_by_email"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.get_user_by_email" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Получение пользователя из базы данных по его электронной почте.</p>
+<dd><p>Получение пользователя по email.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>db</strong> (<em>Session</em>) – Сессия базы данных.</p></li>
-<li><p><strong>email</strong> (<em>str</em>) – Электронная почта пользователя, которого нужно получить.</p></li>
+<li><p><strong>db</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></span>) – Session - сессия БД.</p></li>
+<li><p><strong>email</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – str - email.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Результат<span class="colon">:</span></dt>
-<dd class="field-even"><p>Объект пользователя, если он найден, иначе None.</p>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.models.User" title="app.models.User"><code class="xref py py-class docutils literal notranslate"><span class="pre">User</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
 </dd>
-<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="app.html#app.models.User" title="app.models.User">User</a></p>
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>User или None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.auth.get_user_by_phone">
+<span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">get_user_by_phone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phone</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#get_user_by_phone"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.get_user_by_phone" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Получение пользователя по номеру телефона.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></span>) – Session - сессия БД.</p></li>
+<li><p><strong>phone</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – str - номер телефона.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.models.User" title="app.models.User"><code class="xref py py-class docutils literal notranslate"><span class="pre">User</span></code></a> | <code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>User или None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.auth.is_invalid_agreements">
+<span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">is_invalid_agreements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_in</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#is_invalid_agreements"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.is_invalid_agreements" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Проверяет, даны ли оба необходимых согласия.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>user_in</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.schemas.UserRegister" title="app.schemas.UserRegister"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserRegister</span></code></a></span>) – UserRegister</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True, если отсутствует хотя бы одно согласие.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -317,22 +482,33 @@
 <dt class="sig sig-object py" id="app.routers.auth.login">
 <span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">form_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(NoneType)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#login"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.login" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Авторизация пользователя.</p>
+<p>Body form-data:
+- username: email
+- password: пароль</p>
+<p>Returns:
+- access_token, token_type</p>
+<p>Ошибки:
+- 401: Invalid credentials</p>
 <dl class="field-list simple">
-<dt class="field-odd">Параметры<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>form_data</strong> (<em>OAuth2PasswordRequestForm</em>) – Форма авторизации.</p></li>
-<li><p><strong>db</strong> (<em>Session</em>) – Сессия базы данных.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Результат<span class="colon">:</span></dt>
-<dd class="field-even"><p>Объект токена.</p>
-</dd>
 <dt class="field-odd">Тип результата<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="app.html#app.schemas.Token" title="app.schemas.Token">schemas.Token</a></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.schemas.Token" title="app.schemas.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">Token</span></code></a></span></p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>Exceptions:</dt><dd><p>HTTPException: 401, если данные для авторизации неверны.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.auth.recover_password">
+<span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">recover_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">req</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#recover_password"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.recover_password" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Восстановление пароля по номеру телефона.</p>
+<p>Body JSON:
+- phone: str</p>
+<p>Returns:
+- login (email), password (новый временный пароль)</p>
+<p>Ошибки:
+- 404: User with this phone not found</p>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverResponse" title="app.schemas.PasswordRecoverResponse"><code class="xref py py-class docutils literal notranslate"><span class="pre">PasswordRecoverResponse</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -341,19 +517,23 @@
 <dt class="sig sig-object py" id="app.routers.auth.register">
 <span class="sig-prename descclassname"><span class="pre">app.routers.auth.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/auth.html#register"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.auth.register" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Регистрация пользователя.</p>
+<ul class="simple">
+<li><p>Проверка согласий и уникальности email/phone.</p></li>
+<li><p>Генерация временного пароля и одноразового токена.</p></li>
+<li><p>Сохранение пароля (хэш) и пользователя в БД, временную пару в TempPassword.</p></li>
+</ul>
 <dl class="field-list simple">
 <dt class="field-odd">Параметры<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>user_in</strong> (<a class="reference internal" href="app.html#app.schemas.UserCreate" title="app.schemas.UserCreate"><em>schemas.UserCreate</em></a>) – Данные регистрируемого пользователя.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_in</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.schemas.UserRegister" title="app.schemas.UserRegister"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserRegister</span></code></a></span>) – UserRegister - данные регистрации.</p></li>
+<li><p><strong>db</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></span>) – Session - сессия БД.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Результат<span class="colon">:</span></dt>
-<dd class="field-even"><p>Объект регистрируемого пользователя.</p>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.schemas.UserReadAfterRegister" title="app.schemas.UserReadAfterRegister"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserReadAfterRegister</span></code></a></span></p>
 </dd>
-<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="app.html#app.schemas.UserRead" title="app.schemas.UserRead">schemas.UserRead</a></p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Exceptions:</dt><dd><p>HTTPException: 400, если пользователь с email уже зарегистрирован.</p>
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>UserReadAfterRegister с полем token для бота.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -361,19 +541,76 @@
 </section>
 <section id="module-app.routers.hosts">
 <span id="app-routers-hosts-module"></span><h2>app.routers.hosts module<a class="headerlink" href="#module-app.routers.hosts" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Hosts API Module</p>
+<p>Маршруты для управления хостами текущего пользователя.</p>
+<ol class="arabic">
+<li><p>POST /hosts/
+- Описание: Создать новый хост.
+- Headers:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Authorization: Bearer &lt;access_token&gt;</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Body (JSON):
+- subdomain (str) — желаемый поддомен.
+- plan (PlanEnum) — тарифный план («demo» или «yearly»).</p></li>
+<li><p>Response (200): HostRead
+- id, subdomain, plan, status, expires_at</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized — если токен отсутствует или недействителен.
+- 400 Bad Request — если переданы невалидные данные (например, дублирующийся subdomain).</p></li>
+</ul>
+</li>
+<li><p>GET /hosts/
+- Описание: Получить список всех хостов, принадлежащих текущему пользователю.
+- Headers:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Authorization: Bearer &lt;access_token&gt;</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Response (200): list[HostRead]</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized</p></li>
+</ul>
+</li>
+<li><p>GET /hosts/{host_id}
+- Описание: Получить подробную информацию по конкретному хосту.
+- Headers:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Authorization: Bearer &lt;access_token&gt;</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Path Parameters:
+- host_id (int) — ID запрашиваемого хоста.</p></li>
+<li><p>Response (200): HostDetail
+- все поля HostRead + FTP/SSH/MySQL/Mail учетные данные</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized
+- 404 Not Found — если хост не найден или не принадлежит текущему пользователю.</p></li>
+</ul>
+</li>
+</ol>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.hosts.create_host">
 <span class="sig-prename descclassname"><span class="pre">app.routers.hosts.</span></span><span class="sig-name descname"><span class="pre">create_host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/hosts.html#create_host"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.hosts.create_host" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Создать новый хост.</p>
+<dd><p>Создать новый хост для текущего пользователя.</p>
+<p>Body:
+- subdomain: str
+- plan: PlanEnum</p>
+<p>Возвращает:
+- HostRead</p>
+<p>Ошибки:
+- 401 Unauthorized
+- 400 Bad Request</p>
 <dl class="field-list simple">
-<dt class="field-odd">Параметры<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>host_in</strong> (<a class="reference internal" href="app.html#app.schemas.HostCreate" title="app.schemas.HostCreate"><em>schemas.HostCreate</em></a>) – Данные нового хоста.</p>
-</dd>
-<dt class="field-even">Результат<span class="colon">:</span></dt>
-<dd class="field-even"><p>Объект нового хоста.</p>
-</dd>
 <dt class="field-odd">Тип результата<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="app.html#app.schemas.HostRead" title="app.schemas.HostRead">schemas.HostRead</a></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.models.Host" title="app.models.Host"><code class="xref py py-class docutils literal notranslate"><span class="pre">Host</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -381,18 +618,17 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.hosts.get_host">
 <span class="sig-prename descclassname"><span class="pre">app.routers.hosts.</span></span><span class="sig-name descname"><span class="pre">get_host</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">host_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/hosts.html#get_host"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.hosts.get_host" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Получить хост по его ID.</p>
-<dl class="simple">
-<dt>Аргументы:</dt><dd><p>host_id: ID хоста</p>
-</dd>
-</dl>
+<dd><p>Получить подробную информацию о хосте по его ID.</p>
+<p>Path Parameters:
+- host_id: int</p>
+<p>Возвращает:
+- HostDetail</p>
+<p>Ошибки:
+- 401 Unauthorized
+- 404 Not Found</p>
 <dl class="field-list simple">
-<dt class="field-odd">Результат<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Хост</p>
-</dd>
-</dl>
-<dl class="simple">
-<dt>Ошибки:</dt><dd><p>404: Хост не найден</p>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.models.Host" title="app.models.Host"><code class="xref py py-class docutils literal notranslate"><span class="pre">Host</span></code></a></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -400,10 +636,14 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.hosts.list_hosts">
 <span class="sig-prename descclassname"><span class="pre">app.routers.hosts.</span></span><span class="sig-name descname"><span class="pre">list_hosts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/hosts.html#list_hosts"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.hosts.list_hosts" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Получить список хостов, принадлежащих текущему пользователю.</p>
+<dd><p>Получить все хосты, принадлежащие текущему пользователю.</p>
+<p>Возвращает:
+- list[HostRead]</p>
+<p>Ошибки:
+- 401 Unauthorized</p>
 <dl class="field-list simple">
-<dt class="field-odd">Результат<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Список хостов</p>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>[<a class="reference internal" href="app.html#app.models.Host" title="app.models.Host"><code class="xref py py-class docutils literal notranslate"><span class="pre">Host</span></code></a>]</span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -411,10 +651,39 @@
 </section>
 <section id="module-app.routers.users">
 <span id="app-routers-users-module"></span><h2>app.routers.users module<a class="headerlink" href="#module-app.routers.users" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Users API Module</p>
+<p>Модуль для получения информации о текущем пользователе на основе JWT-токена.</p>
+<ol class="arabic">
+<li><p>GET /users/me
+- Описание: Получить информацию о текущем пользователе.
+- Headers:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Authorization: Bearer &lt;access_token&gt;</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Response (200): UserRead
+- id, name, email, phone, role, active, created_at</p></li>
+<li><p>Ошибки:
+- 401 Unauthorized — если токен отсутствует или недействителен.
+- 404 Not Found — если пользователь из токена не найден в БД.</p></li>
+</ul>
+</li>
+</ol>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.users.get_current_user">
 <span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">get_current_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(OAuth2PasswordBearer)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/users.html#get_current_user"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.users.get_current_user" title="Ссылка на это определение">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Депенденси для извлечения текущего пользователя из JWT-токена.</p>
+<p>Args:
+- token: str (Bearer &lt;token&gt;)
+- db: Session</p>
+<p>Returns:
+- models.User</p>
+<p>Ошибки:
+- HTTP 401: Invalid token
+- HTTP 404: User not found</p>
+<dl class="field-list simple">
 <dt class="field-odd">Тип результата<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.models.User" title="app.models.User"><code class="xref py py-class docutils literal notranslate"><span class="pre">User</span></code></a></span></p>
 </dd>
@@ -424,7 +693,15 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="app.routers.users.read_users_me">
 <span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">read_users_me</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routers/users.html#read_users_me"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.routers.users.read_users_me" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Получить информацию о текущем пользователе.</p>
+<dd><p>Возвращает данные текущего аутентифицированного пользователя.</p>
+<p>Ошибки:
+- 401 Unauthorized
+- 404 Not Found</p>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="app.html#app.models.User" title="app.models.User"><code class="xref py py-class docutils literal notranslate"><span class="pre">User</span></code></a></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>
@@ -479,8 +756,12 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#module-app.routers.auth">app.routers.auth module</a><ul>
+<li><a class="reference internal" href="#app.routers.auth.generate_random_password"><code class="docutils literal notranslate"><span class="pre">generate_random_password()</span></code></a></li>
 <li><a class="reference internal" href="#app.routers.auth.get_user_by_email"><code class="docutils literal notranslate"><span class="pre">get_user_by_email()</span></code></a></li>
+<li><a class="reference internal" href="#app.routers.auth.get_user_by_phone"><code class="docutils literal notranslate"><span class="pre">get_user_by_phone()</span></code></a></li>
+<li><a class="reference internal" href="#app.routers.auth.is_invalid_agreements"><code class="docutils literal notranslate"><span class="pre">is_invalid_agreements()</span></code></a></li>
 <li><a class="reference internal" href="#app.routers.auth.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
+<li><a class="reference internal" href="#app.routers.auth.recover_password"><code class="docutils literal notranslate"><span class="pre">recover_password()</span></code></a></li>
 <li><a class="reference internal" href="#app.routers.auth.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
 </ul>
 </li>

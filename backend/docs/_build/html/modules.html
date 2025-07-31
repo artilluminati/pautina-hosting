@@ -305,6 +305,12 @@
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.StatusEnum.pending"><code class="docutils literal notranslate"><span class="pre">StatusEnum.pending</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.models.TempPassword"><code class="docutils literal notranslate"><span class="pre">TempPassword</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.TempPassword.created_at"><code class="docutils literal notranslate"><span class="pre">TempPassword.created_at</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.TempPassword.temp_password"><code class="docutils literal notranslate"><span class="pre">TempPassword.temp_password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.TempPassword.token"><code class="docutils literal notranslate"><span class="pre">TempPassword.token</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.active"><code class="docutils literal notranslate"><span class="pre">User.active</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.created_at"><code class="docutils literal notranslate"><span class="pre">User.created_at</span></code></a></li>
@@ -313,6 +319,8 @@
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.hosts"><code class="docutils literal notranslate"><span class="pre">User.hosts</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.phone"><code class="docutils literal notranslate"><span class="pre">User.phone</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.phone_verified"><code class="docutils literal notranslate"><span class="pre">User.phone_verified</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
 </ul>
 </li>
@@ -348,6 +356,17 @@
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.HostRead.subdomain"><code class="docutils literal notranslate"><span class="pre">HostRead.subdomain</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverRequest"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverRequest</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverRequest.model_config"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverRequest.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverRequest.phone"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverRequest.phone</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverResponse"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverResponse.login"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse.login</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverResponse.model_config"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.PasswordRecoverResponse.password"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse.password</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.Token.access_token"><code class="docutils literal notranslate"><span class="pre">Token.access_token</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.Token.model_config"><code class="docutils literal notranslate"><span class="pre">Token.model_config</span></code></a></li>
@@ -360,13 +379,6 @@
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.TokenData.user_id"><code class="docutils literal notranslate"><span class="pre">TokenData.user_id</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.UserCreate"><code class="docutils literal notranslate"><span class="pre">UserCreate</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserCreate.email"><code class="docutils literal notranslate"><span class="pre">UserCreate.email</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserCreate.model_config"><code class="docutils literal notranslate"><span class="pre">UserCreate.model_config</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserCreate.name"><code class="docutils literal notranslate"><span class="pre">UserCreate.name</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserCreate.password"><code class="docutils literal notranslate"><span class="pre">UserCreate.password</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.UserRead"><code class="docutils literal notranslate"><span class="pre">UserRead</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.Config"><code class="docutils literal notranslate"><span class="pre">UserRead.Config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.active"><code class="docutils literal notranslate"><span class="pre">UserRead.active</span></code></a></li>
@@ -375,7 +387,23 @@
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.id"><code class="docutils literal notranslate"><span class="pre">UserRead.id</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.model_config"><code class="docutils literal notranslate"><span class="pre">UserRead.model_config</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.name"><code class="docutils literal notranslate"><span class="pre">UserRead.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.phone"><code class="docutils literal notranslate"><span class="pre">UserRead.phone</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRead.role"><code class="docutils literal notranslate"><span class="pre">UserRead.role</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.UserReadAfterRegister"><code class="docutils literal notranslate"><span class="pre">UserReadAfterRegister</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserReadAfterRegister.model_config"><code class="docutils literal notranslate"><span class="pre">UserReadAfterRegister.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserReadAfterRegister.token"><code class="docutils literal notranslate"><span class="pre">UserReadAfterRegister.token</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.html#app.schemas.UserRegister"><code class="docutils literal notranslate"><span class="pre">UserRegister</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.agree_privacy"><code class="docutils literal notranslate"><span class="pre">UserRegister.agree_privacy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.agree_terms"><code class="docutils literal notranslate"><span class="pre">UserRegister.agree_terms</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.email"><code class="docutils literal notranslate"><span class="pre">UserRegister.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.model_config"><code class="docutils literal notranslate"><span class="pre">UserRegister.model_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.name"><code class="docutils literal notranslate"><span class="pre">UserRegister.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.password"><code class="docutils literal notranslate"><span class="pre">UserRegister.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.html#app.schemas.UserRegister.phone"><code class="docutils literal notranslate"><span class="pre">UserRegister.phone</span></code></a></li>
 </ul>
 </li>
 </ul>

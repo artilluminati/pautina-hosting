@@ -251,8 +251,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="app.routers.html#module-app.routers.auth">app.routers.auth module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.generate_random_password"><code class="docutils literal notranslate"><span class="pre">generate_random_password()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.get_user_by_email"><code class="docutils literal notranslate"><span class="pre">get_user_by_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.get_user_by_phone"><code class="docutils literal notranslate"><span class="pre">get_user_by_phone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.is_invalid_agreements"><code class="docutils literal notranslate"><span class="pre">is_invalid_agreements()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.recover_password"><code class="docutils literal notranslate"><span class="pre">recover_password()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="app.routers.html#app.routers.auth.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
 </ul>
 </li>
@@ -469,6 +473,27 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="app.models.TempPassword">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">TempPassword</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#TempPassword"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.models.TempPassword" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.TempPassword.created_at">
+<span class="sig-name descname"><span class="pre">created_at</span></span><a class="headerlink" href="#app.models.TempPassword.created_at" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.TempPassword.temp_password">
+<span class="sig-name descname"><span class="pre">temp_password</span></span><a class="headerlink" href="#app.models.TempPassword.temp_password" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.TempPassword.token">
+<span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#app.models.TempPassword.token" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="app.models.User">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models.html#User"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.models.User" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">Base</span></code></p>
@@ -505,6 +530,16 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.models.User.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#app.models.User.name" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.phone">
+<span class="sig-name descname"><span class="pre">phone</span></span><a class="headerlink" href="#app.models.User.phone" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.models.User.phone_verified">
+<span class="sig-name descname"><span class="pre">phone_verified</span></span><a class="headerlink" href="#app.models.User.phone_verified" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -645,6 +680,45 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverRequest">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.schemas.</span></span><span class="sig-name descname"><span class="pre">PasswordRecoverRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/schemas.html#PasswordRecoverRequest"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.schemas.PasswordRecoverRequest" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverRequest.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#app.schemas.PasswordRecoverRequest.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverRequest.phone">
+<span class="sig-name descname"><span class="pre">phone</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.PasswordRecoverRequest.phone" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverResponse">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.schemas.</span></span><span class="sig-name descname"><span class="pre">PasswordRecoverResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/schemas.html#PasswordRecoverResponse"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.schemas.PasswordRecoverResponse" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverResponse.login">
+<span class="sig-name descname"><span class="pre">login</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailStr</span></code></em><a class="headerlink" href="#app.schemas.PasswordRecoverResponse.login" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverResponse.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#app.schemas.PasswordRecoverResponse.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.PasswordRecoverResponse.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.PasswordRecoverResponse.password" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="app.schemas.Token">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.schemas.</span></span><span class="sig-name descname"><span class="pre">Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/schemas.html#Token"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.schemas.Token" title="Ссылка на это определение">¶</a></dt>
 <dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
@@ -684,33 +758,6 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="app.schemas.TokenData.user_id">
 <span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code><span class="pre">]</span></em><a class="headerlink" href="#app.schemas.TokenData.user_id" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="app.schemas.UserCreate">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.schemas.</span></span><span class="sig-name descname"><span class="pre">UserCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/schemas.html#UserCreate"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.schemas.UserCreate" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.schemas.UserCreate.email">
-<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailStr</span></code></em><a class="headerlink" href="#app.schemas.UserCreate.email" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.schemas.UserCreate.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#app.schemas.UserCreate.model_config" title="Ссылка на это определение">¶</a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.schemas.UserCreate.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.UserCreate.name" title="Ссылка на это определение">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="app.schemas.UserCreate.password">
-<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.UserCreate.password" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -762,8 +809,72 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRead.phone">
+<span class="sig-name descname"><span class="pre">phone</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.UserRead.phone" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="app.schemas.UserRead.role">
 <span class="sig-name descname"><span class="pre">role</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.models.RoleEnum" title="app.models.RoleEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">RoleEnum</span></code></a></em><a class="headerlink" href="#app.schemas.UserRead.role" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.schemas.UserReadAfterRegister">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.schemas.</span></span><span class="sig-name descname"><span class="pre">UserReadAfterRegister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/schemas.html#UserReadAfterRegister"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.schemas.UserReadAfterRegister" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="#app.schemas.UserRead" title="app.schemas.UserRead"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserRead</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserReadAfterRegister.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'from_attributes':</span> <span class="pre">True}</span></em><a class="headerlink" href="#app.schemas.UserReadAfterRegister.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserReadAfterRegister.token">
+<span class="sig-name descname"><span class="pre">token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.UserReadAfterRegister.token" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.schemas.UserRegister">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.schemas.</span></span><span class="sig-name descname"><span class="pre">UserRegister</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/schemas.html#UserRegister"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#app.schemas.UserRegister" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.agree_privacy">
+<span class="sig-name descname"><span class="pre">agree_privacy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#app.schemas.UserRegister.agree_privacy" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.agree_terms">
+<span class="sig-name descname"><span class="pre">agree_terms</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#app.schemas.UserRegister.agree_terms" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.email">
+<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailStr</span></code></em><a class="headerlink" href="#app.schemas.UserRegister.email" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#app.schemas.UserRegister.model_config" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.UserRegister.name" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#app.schemas.UserRegister.password" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.schemas.UserRegister.phone">
+<span class="sig-name descname"><span class="pre">phone</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#app.schemas.UserRegister.phone" title="Ссылка на это определение">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -865,6 +976,12 @@
 <li><a class="reference internal" href="#app.models.StatusEnum.pending"><code class="docutils literal notranslate"><span class="pre">StatusEnum.pending</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#app.models.TempPassword"><code class="docutils literal notranslate"><span class="pre">TempPassword</span></code></a><ul>
+<li><a class="reference internal" href="#app.models.TempPassword.created_at"><code class="docutils literal notranslate"><span class="pre">TempPassword.created_at</span></code></a></li>
+<li><a class="reference internal" href="#app.models.TempPassword.temp_password"><code class="docutils literal notranslate"><span class="pre">TempPassword.temp_password</span></code></a></li>
+<li><a class="reference internal" href="#app.models.TempPassword.token"><code class="docutils literal notranslate"><span class="pre">TempPassword.token</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#app.models.User"><code class="docutils literal notranslate"><span class="pre">User</span></code></a><ul>
 <li><a class="reference internal" href="#app.models.User.active"><code class="docutils literal notranslate"><span class="pre">User.active</span></code></a></li>
 <li><a class="reference internal" href="#app.models.User.created_at"><code class="docutils literal notranslate"><span class="pre">User.created_at</span></code></a></li>
@@ -873,6 +990,8 @@
 <li><a class="reference internal" href="#app.models.User.hosts"><code class="docutils literal notranslate"><span class="pre">User.hosts</span></code></a></li>
 <li><a class="reference internal" href="#app.models.User.id"><code class="docutils literal notranslate"><span class="pre">User.id</span></code></a></li>
 <li><a class="reference internal" href="#app.models.User.name"><code class="docutils literal notranslate"><span class="pre">User.name</span></code></a></li>
+<li><a class="reference internal" href="#app.models.User.phone"><code class="docutils literal notranslate"><span class="pre">User.phone</span></code></a></li>
+<li><a class="reference internal" href="#app.models.User.phone_verified"><code class="docutils literal notranslate"><span class="pre">User.phone_verified</span></code></a></li>
 <li><a class="reference internal" href="#app.models.User.role"><code class="docutils literal notranslate"><span class="pre">User.role</span></code></a></li>
 </ul>
 </li>
@@ -911,6 +1030,17 @@
 <li><a class="reference internal" href="#app.schemas.HostRead.subdomain"><code class="docutils literal notranslate"><span class="pre">HostRead.subdomain</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverRequest"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverRequest</span></code></a><ul>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverRequest.model_config"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverRequest.model_config</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverRequest.phone"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverRequest.phone</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverResponse"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse</span></code></a><ul>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverResponse.login"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse.login</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverResponse.model_config"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse.model_config</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.PasswordRecoverResponse.password"><code class="docutils literal notranslate"><span class="pre">PasswordRecoverResponse.password</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#app.schemas.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
 <li><a class="reference internal" href="#app.schemas.Token.access_token"><code class="docutils literal notranslate"><span class="pre">Token.access_token</span></code></a></li>
 <li><a class="reference internal" href="#app.schemas.Token.model_config"><code class="docutils literal notranslate"><span class="pre">Token.model_config</span></code></a></li>
@@ -921,13 +1051,6 @@
 <li><a class="reference internal" href="#app.schemas.TokenData.model_config"><code class="docutils literal notranslate"><span class="pre">TokenData.model_config</span></code></a></li>
 <li><a class="reference internal" href="#app.schemas.TokenData.role"><code class="docutils literal notranslate"><span class="pre">TokenData.role</span></code></a></li>
 <li><a class="reference internal" href="#app.schemas.TokenData.user_id"><code class="docutils literal notranslate"><span class="pre">TokenData.user_id</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#app.schemas.UserCreate"><code class="docutils literal notranslate"><span class="pre">UserCreate</span></code></a><ul>
-<li><a class="reference internal" href="#app.schemas.UserCreate.email"><code class="docutils literal notranslate"><span class="pre">UserCreate.email</span></code></a></li>
-<li><a class="reference internal" href="#app.schemas.UserCreate.model_config"><code class="docutils literal notranslate"><span class="pre">UserCreate.model_config</span></code></a></li>
-<li><a class="reference internal" href="#app.schemas.UserCreate.name"><code class="docutils literal notranslate"><span class="pre">UserCreate.name</span></code></a></li>
-<li><a class="reference internal" href="#app.schemas.UserCreate.password"><code class="docutils literal notranslate"><span class="pre">UserCreate.password</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#app.schemas.UserRead"><code class="docutils literal notranslate"><span class="pre">UserRead</span></code></a><ul>
@@ -941,7 +1064,23 @@
 <li><a class="reference internal" href="#app.schemas.UserRead.id"><code class="docutils literal notranslate"><span class="pre">UserRead.id</span></code></a></li>
 <li><a class="reference internal" href="#app.schemas.UserRead.model_config"><code class="docutils literal notranslate"><span class="pre">UserRead.model_config</span></code></a></li>
 <li><a class="reference internal" href="#app.schemas.UserRead.name"><code class="docutils literal notranslate"><span class="pre">UserRead.name</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRead.phone"><code class="docutils literal notranslate"><span class="pre">UserRead.phone</span></code></a></li>
 <li><a class="reference internal" href="#app.schemas.UserRead.role"><code class="docutils literal notranslate"><span class="pre">UserRead.role</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.schemas.UserReadAfterRegister"><code class="docutils literal notranslate"><span class="pre">UserReadAfterRegister</span></code></a><ul>
+<li><a class="reference internal" href="#app.schemas.UserReadAfterRegister.model_config"><code class="docutils literal notranslate"><span class="pre">UserReadAfterRegister.model_config</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserReadAfterRegister.token"><code class="docutils literal notranslate"><span class="pre">UserReadAfterRegister.token</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.schemas.UserRegister"><code class="docutils literal notranslate"><span class="pre">UserRegister</span></code></a><ul>
+<li><a class="reference internal" href="#app.schemas.UserRegister.agree_privacy"><code class="docutils literal notranslate"><span class="pre">UserRegister.agree_privacy</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRegister.agree_terms"><code class="docutils literal notranslate"><span class="pre">UserRegister.agree_terms</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRegister.email"><code class="docutils literal notranslate"><span class="pre">UserRegister.email</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRegister.model_config"><code class="docutils literal notranslate"><span class="pre">UserRegister.model_config</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRegister.name"><code class="docutils literal notranslate"><span class="pre">UserRegister.name</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRegister.password"><code class="docutils literal notranslate"><span class="pre">UserRegister.password</span></code></a></li>
+<li><a class="reference internal" href="#app.schemas.UserRegister.phone"><code class="docutils literal notranslate"><span class="pre">UserRegister.phone</span></code></a></li>
 </ul>
 </li>
 </ul>

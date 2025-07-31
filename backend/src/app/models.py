@@ -25,11 +25,19 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
+    phone = Column(String, unique=True, index=True, nullable=False)
+    phone_verified = Column(Boolean, default=False)
     hashed_password = Column(String, nullable=False)
     role = Column(Enum(RoleEnum), default=RoleEnum.user)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     hosts = relationship("Host", back_populates="owner")
+
+class TempPassword(Base):
+    __tablename__ = "temp_passwords"
+    token = Column(String, unique=True, index=True, primary_key=True, nullable=False)
+    temp_password = Column(String, nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Host(Base):
     __tablename__ = "hosts"
